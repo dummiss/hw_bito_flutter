@@ -1,14 +1,15 @@
 # bitotaskflutter_app
 
 Bito Flutter 面試作業
-
-figma網頁設計
+  
+figma網頁設計  
 https://www.figma.com/proto/CM4WMD69nMYeWAvRF6V2xr/%E7%B6%B2%E9%A0%81%E8%A8%AD%E8%A8%88?node-id=36%3A712&starting-point-node-id=2%3A3&scaling=scale-down-width
-https://www.figma.com/file/yJSlsc76WWJwved3QdHDdq/Untitled?node-id=0%3A1
 
+https://www.figma.com/file/yJSlsc76WWJwved3QdHDdq/Untitled?node-id=0%3A1  
+  
 react網頁作品-本機可Demo
-
-
+  
+  
 
 ## Getting Started
 
