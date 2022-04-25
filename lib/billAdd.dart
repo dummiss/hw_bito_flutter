@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'biiList.dart';
 
 class BillAdd extends StatefulWidget {
   @override
@@ -8,22 +10,22 @@ class BillAdd extends StatefulWidget {
 class BillAddState extends State<BillAdd> {
   TextEditingController _totalPriceController =
       TextEditingController(); //紀錄金額控制器
+
   var _money = 0;
   var _peopleNum;
   var _average;
-
-  // void _countaverang(){
-  //   setState(() {
-  //     _peopleNum=textFieldList.length;
-  //     _average=_money/_peopleNum;
-  //   });
-  // }
+  void _countaverang() {
+    setState(() {
+      _peopleNum = textFieldList.length;
+      _average = _money / _peopleNum;
+    });
+  }
   // TextEditingController _pwdController = new TextEditingController();
   // GlobalKey _formKey = new GlobalKey<FormState>();
 
   Widget creatpaymoney() {
     var paymoney = _payvalue == '各自'
-        ?  TextField(
+        ? TextField(
             decoration: InputDecoration(prefixIcon: Icon(Icons.attach_money)))
         : TextField(
             decoration: InputDecoration(
@@ -72,14 +74,14 @@ class BillAddState extends State<BillAdd> {
   void addTextField() {
     textFieldList.add(creatNewTextField());
     paymoneyList.add(creatpaymoney());
-    _peopleNum = textFieldList.length;
-    _average = _money / _peopleNum;
+    _countaverang();
   }
 
 //remove:分帳人用的
   void removeTextField() {
-      textFieldList.removeLast();
-      paymoneyList.removeLast();
+    textFieldList.removeLast();
+    paymoneyList.removeLast();
+    _countaverang();
     // if(index == 0 ) {
     //   print(index);
     //   return ;
@@ -88,16 +90,11 @@ class BillAddState extends State<BillAdd> {
     //   paymoneyList.removeAt(index);
     //   print(index);
     // }
-
   }
 
   //狀態改變用:分帳人用的
-  List<TextField> _textFieldList() {
+  List<Widget> _textFieldList() {
     return textFieldList;
-  }
-
-  List<Widget> _paymoneyList() {
-    return paymoneyList;
   }
 
   var _value; //紀錄值:下拉選單用
@@ -108,18 +105,50 @@ class BillAddState extends State<BillAdd> {
     return Scaffold(
       body: SingleChildScrollView(
           child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0), //上下，左右
+        padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 24.0), //上下，左右
         child: Form(
           // key: _formKey, //設定globalKey，用於後面獲取FormState
           child: Column(
             children: [
+              Padding(
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color.fromARGB(255, 57, 86, 89),
+                    ),
+                    icon: Icon(
+                      Icons.send,
+                    ),
+                    label: Text(
+                      "送出",
+                    ),
+                    onPressed: () {},
+                  )),
               ListTile(
-                leading: Text('金額: '),
+                leading: Text(
+                  '金額: ',
+                  style: TextStyle(fontSize: 18),
+                ),
                 title: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 57, 86, 89),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 57, 86, 89),
+                        ),
+                      ),
+                    ),
                     keyboardType: TextInputType.number,
                     onChanged: (text) {
                       setState(() {
                         _money = int.parse(text);
+                        _countaverang();
                         print(_money);
                       });
                     },
@@ -129,9 +158,7 @@ class BillAddState extends State<BillAdd> {
                 children: <Widget>[
                   (const Padding(
                       padding: EdgeInsets.only(left: 15, right: 19),
-                      child: Text(
-                        '分類:',
-                      ))),
+                      child: Text('分類:', style: TextStyle(fontSize: 18)))),
                   DropdownButton(
                     value: _value,
                     items: const <DropdownMenuItem<String>>[
@@ -152,21 +179,21 @@ class BillAddState extends State<BillAdd> {
                 ],
               ),
               const ListTile(
-                leading: Text('名稱: '),
+                leading: Text('名稱: ', style: TextStyle(fontSize: 18)),
                 title: TextField(),
               ),
               const ListTile(
-                leading: Text('備註: '),
+                leading: Text('備註: ', style: TextStyle(fontSize: 18)),
                 title: TextField(),
               ),
               const ListTile(
-                leading: Text('付款人: '),
+                leading: Text('付款人: ', style: TextStyle(fontSize: 18)),
                 title: TextField(),
               ),
               Row(children: [
                 Padding(
                   padding: EdgeInsets.only(left: 17, right: 15),
-                  child: Text('分帳人:'),
+                  child: Text('分帳人:', style: TextStyle(fontSize: 18)),
                 ),
                 Expanded(
                   //自適應框，不然會跑
@@ -198,22 +225,40 @@ class BillAddState extends State<BillAdd> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                         Container(
+                            height: 500,
                             width: 150,
-                            child: Column(children: _textFieldList())),
+                            child: Column(children: textFieldList)),
                         Container(
+                            height: 500,
                             width: 150,
-                            child: Column(children: _paymoneyList())),
+                            child: Column(children: [
+                              (_payvalue == "平分"
+                                  ? Expanded(
+                                      child: ListView.builder(
+                                          itemCount: paymoneyList.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return TextField(
+                                                decoration: InputDecoration(
+                                                    prefixIcon: Icon(
+                                                        Icons.attach_money),
+                                                    enabled: false,
+                                                    hintText: '$_average'));
+                                          }))
+                                  : Expanded(
+                                      child: ListView.builder(
+                                          itemCount: paymoneyList.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return TextField(
+                                                decoration: InputDecoration(
+                                                    prefixIcon: Icon(
+                                                        Icons.attach_money)));
+                                          }))),
+                            ])),
                       ]))
                 ],
-              )
-              // Padding(
-              //   padding: EdgeInsets.only(left: 80),
-              //   child: Column(children: _textFieldList()),
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.only(left: 80),
-              //   child: Column(children: _paymoneyList()),
-              // ),
+              ),
             ],
           ),
         ),

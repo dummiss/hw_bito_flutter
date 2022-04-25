@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'homePage.dart'; //起始頁面
+import 'biiList.dart';
 import 'basicBottomNavBar.dart'; //選單及各頁面串接 BillList()
 
 void main() => runApp(MyApp());
@@ -19,9 +20,9 @@ class MyApp extends StatelessWidget {
         '/listPage': (context) {
           return ListPage(data: ''); //先給定空值，不然會出錯 ???
         },
-        // '/billList':(context){
-        //   return BillList();
-        // }
+        '/billList':(context){
+          return BillList( billData:'');
+        }
 
       },
     );

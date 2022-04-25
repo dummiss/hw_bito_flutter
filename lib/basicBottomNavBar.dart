@@ -14,7 +14,7 @@ class ListPage extends StatefulWidget {
 class ListPagesState extends State<ListPage> {
   //底部導覽切換的頁面
   final _pages = <Widget>[
-    BillList(),
+    BillList(billData: '',),
     BillAdd(),
     BillDebt(),
   ];
@@ -46,6 +46,7 @@ class ListPagesState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,//防止浮動btn跟著鍵盤移動
       appBar: AppBar(
         title: Text(
           '${widget.data} 的${bottomNavBarItems[_selectedIndex].label}',
